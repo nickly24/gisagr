@@ -1,0 +1,58 @@
+.xml-output-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.xml-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+.xml-output-heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.xml-output-download {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.xml-output-download:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.xml-output-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.xml-output-content {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg);
+  overflow: auto;
+  max-height: 320px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

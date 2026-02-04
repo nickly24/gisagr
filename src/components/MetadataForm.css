@@ -1,0 +1,52 @@
+.metadata-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.metadata-heading {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.metadata-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.metadata-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.metadata-input {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s;
+}
+
+.metadata-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.metadata-input::placeholder {
+  color: var(--text-muted);
+}

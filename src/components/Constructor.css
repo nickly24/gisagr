@@ -1,0 +1,262 @@
+.constructor-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.constructor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+.constructor-heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.constructor-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.constructor-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.constructor-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.constructor-btn--primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.constructor-btn--primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.constructor-btn--secondary {
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.constructor-btn--secondary:hover:not(:disabled) {
+  background: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.constructor-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  gap: 0;
+  min-height: 320px;
+}
+
+@media (max-width: 900px) {
+  .constructor-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.constructor-unassigned {
+  padding: 1rem 1.25rem;
+  border-right: 1px solid var(--border);
+  overflow: auto;
+}
+
+@media (max-width: 900px) {
+  .constructor-unassigned {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+.constructor-boxes {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-content: flex-start;
+  overflow: auto;
+}
+
+.constructor-boxes-empty {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Droppable zone */
+.constructor-zone {
+  min-height: 120px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.constructor-zone--over {
+  border-color: var(--accent);
+  background: var(--accent-alpha);
+}
+
+.constructor-zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-alt);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.constructor-zone-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.constructor-zone-count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.constructor-zone-content {
+  padding: 0.75rem;
+  min-height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-content: flex-start;
+}
+
+.constructor-zone-empty {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  width: 100%;
+}
+
+/* Box card */
+.constructor-box {
+  flex: 0 0 auto;
+  width: 280px;
+  max-width: 100%;
+}
+
+.constructor-box .constructor-zone {
+  min-height: 100px;
+}
+
+.constructor-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
+}
+
+.constructor-box-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.constructor-box-remove {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.constructor-box-remove:hover {
+  color: var(--error, #c53030);
+  background: var(--surface-alt);
+}
+
+/* Draggable chip */
+.constructor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: grab;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  user-select: none;
+}
+
+.constructor-chip:active {
+  cursor: grabbing;
+}
+
+.constructor-chip:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-alpha);
+}
+
+.constructor-chip--dragging {
+  opacity: 0.6;
+  box-shadow: var(--shadow-md);
+}
+
+.constructor-chip--overlay {
+  cursor: grabbing;
+  box-shadow: var(--shadow-lg);
+  opacity: 1;
+}
+
+.constructor-chip-grip {
+  width: 4px;
+  height: 12px;
+  background: var(--text-muted);
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.constructor-chip-code {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

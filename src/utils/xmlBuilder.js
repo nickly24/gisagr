@@ -38,7 +38,11 @@ export function buildAggregationXml(state) {
     boxes,
   } = state;
 
-  const palletCode = palletPrefix + String(palletStartNumber).padStart(3, '0');
+  const prefix = (palletPrefix || '').startsWith('00') ? palletPrefix : '00' + palletPrefix;
+  const palletCode =
+    prefix.length >= 20
+      ? String(prefix).slice(0, 20)
+      : prefix + String(palletStartNumber || 1).padStart(Math.max(1, 20 - prefix.length), '0');
   const boxesXml = boxes.map((box, i) => {
     const boxCode = boxPrefix + String(boxStartNumber + i).padStart(3, '0');
     return renderBox(boxCode, box.codes, Math.max(box.codes.length, 2));

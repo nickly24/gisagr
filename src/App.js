@@ -8,7 +8,14 @@ import { Constructor } from './components/Constructor';
 import { MetadataForm } from './components/MetadataForm';
 import { XmlOutput } from './components/XmlOutput';
 import { SqlOutput } from './components/SqlOutput';
+import { DbGuide } from './components/DbGuide';
+import { fetchAllPallets, findFirstFreePalletCode, uploadAggregationXml } from './api/palletsApi';
 import './App.css';
+
+const TABS = [
+  { id: 'constructor', label: 'Конструктор' },
+  { id: 'db-guide', label: 'Документация БД' },
+];
 
 let boxIdCounter = 0;
 function nextBoxId() {
@@ -44,10 +51,14 @@ const initialMeta = {
 };
 
 function App() {
+  const [activeTab, setActiveTab] = useState('constructor');
   const [codesRaw, setCodesRaw] = useState('');
   const [unassignedCodes, setUnassignedCodes] = useState([]);
   const [boxes, setBoxes] = useState([]);
   const [meta, setMeta] = useState(initialMeta);
+  const [occupiedPallets, setOccupiedPallets] = useState([]);
+  const [palletsLoading, setPalletsLoading] = useState(false);
+  const [palletsError, setPalletsError] = useState(null);
 
   const parsedCodes = useMemo(() => parseProductCodes(codesRaw), [codesRaw]);
 
@@ -107,6 +118,29 @@ function App() {
     setUnassignedCodes([]);
   }, [unassignedCodes]);
 
+  const distributeIntoBoxes = useCallback(
+    (boxCount) => {
+      const codes = [...unassignedCodes];
+      if (codes.length === 0 || boxCount < 1) return;
+      const n = Math.min(boxCount, codes.length);
+      const perBox = Math.floor(codes.length / n);
+      const remainder = codes.length % n;
+      const newBoxes = [];
+      let idx = 0;
+      for (let i = 0; i < n; i++) {
+        const take = perBox + (i < remainder ? 1 : 0);
+        newBoxes.push({
+          id: nextBoxId(),
+          codes: codes.slice(idx, idx + take),
+        });
+        idx += take;
+      }
+      setBoxes(newBoxes);
+      setUnassignedCodes([]);
+    },
+    [unassignedCodes]
+  );
+
   const xmlState = useMemo(
     () => ({
       meta,
@@ -138,6 +172,14 @@ function App() {
     URL.revokeObjectURL(url);
   }, [generatedXml, meta.batchNumber]);
 
+  const handleSendXml = useCallback(
+    async (xml, batchNumber) => {
+      const filename = `agr${String(batchNumber || meta.batchNumber || 'export').replace(/\s/g, '')}.xml`;
+      await uploadAggregationXml(xml, filename);
+    },
+    [meta.batchNumber]
+  );
+
   const codesForSql = useMemo(
     () => boxes.flatMap((b) => b.codes),
     [boxes]
@@ -162,14 +204,64 @@ function App() {
     setMeta(nextMeta);
   }, []);
 
+  const handleFetchPallets = useCallback(async () => {
+    setPalletsLoading(true);
+    setPalletsError(null);
+    try {
+      const codes = await fetchAllPallets();
+      setOccupiedPallets(codes);
+    } catch (err) {
+      setPalletsError(err?.message || 'Ошибка загрузки паллет');
+      setOccupiedPallets([]);
+    } finally {
+      setPalletsLoading(false);
+    }
+  }, []);
+
+  const handleSelectFirstFree = useCallback(async () => {
+    const basePrefix = String(meta.palletPrefix ?? DEFAULTS.palletPrefix).trim();
+    if (!basePrefix) return;
+    let codes = occupiedPallets;
+    if (codes.length === 0) {
+      setPalletsLoading(true);
+      setPalletsError(null);
+      try {
+        codes = await fetchAllPallets();
+        setOccupiedPallets(codes);
+      } catch (err) {
+        setPalletsError(err?.message || 'Ошибка загрузки паллет');
+        setPalletsLoading(false);
+        return;
+      }
+      setPalletsLoading(false);
+    }
+    const fullCode = findFirstFreePalletCode(basePrefix, codes, 1);
+    setMeta((m) => ({ ...m, palletPrefix: fullCode }));
+  }, [meta.palletPrefix, occupiedPallets]);
+
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">Конструктор агрегаций</h1>
-        <p className="app-subtitle">Введите коды, распределите по коробкам и скачайте XML</p>
+        <h1 className="app-title">Planto — портал инструментов</h1>
+        <nav className="app-tabs">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`app-tab ${activeTab === tab.id ? 'app-tab--active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
       </header>
 
       <main className="app-main">
+        {activeTab === 'db-guide' ? (
+          <DbGuide />
+        ) : (
+          <>
         <div className="app-block">
           <CodeInput
             value={codesRaw}
@@ -194,20 +286,36 @@ function App() {
             onAddBox={addBox}
             onRemoveBox={removeBox}
             onAllInOne={allInOne}
+            onDistribute={distributeIntoBoxes}
           />
         </div>
 
         <div className="app-block app-block--meta">
-          <MetadataForm meta={meta} onChange={handleMetaChange} />
+          <MetadataForm
+            meta={meta}
+            onChange={handleMetaChange}
+            occupiedPallets={occupiedPallets}
+            onFetchPallets={handleFetchPallets}
+            onSelectFirstFree={handleSelectFirstFree}
+            palletsLoading={palletsLoading}
+            palletsError={palletsError}
+          />
         </div>
 
         <div className="app-block">
-          <XmlOutput xml={generatedXml} onDownload={handleDownload} />
+          <XmlOutput
+            xml={generatedXml}
+            onDownload={handleDownload}
+            onSend={handleSendXml}
+            batchNumber={meta.batchNumber}
+          />
         </div>
 
         <div className="app-block">
           <SqlOutput sql={generatedSql} onDownload={handleDownloadSql} />
         </div>
+          </>
+        )}
       </main>
     </div>
   );

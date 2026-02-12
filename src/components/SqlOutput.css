@@ -14,6 +14,33 @@
   background: var(--surface-alt);
 }
 
+.sql-output-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sql-output-copy {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.sql-output-copy:hover:not(:disabled) {
+  filter: brightness(0.97);
+}
+
+.sql-output-copy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .sql-output-heading {
   margin: 0;
   font-size: 1rem;

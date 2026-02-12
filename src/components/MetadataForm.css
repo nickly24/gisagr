@@ -50,3 +50,111 @@
 .metadata-input::placeholder {
   color: var(--text-muted);
 }
+
+.metadata-pallets-block {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.metadata-pallets-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.metadata-pallets-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metadata-pallets-count {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.metadata-pallets-error {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--error, #dc2626);
+}
+
+.metadata-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, filter 0.15s;
+}
+
+.metadata-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.metadata-btn--primary {
+  background: var(--accent);
+  color: white;
+}
+
+.metadata-btn--primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.metadata-btn--secondary {
+  background: var(--surface-alt);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.metadata-btn--secondary:hover:not(:disabled) {
+  background: var(--border-subtle);
+}
+
+.metadata-btn--small {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.metadata-field--with-action .metadata-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.metadata-pallets-list-wrap {
+  margin-top: 1rem;
+}
+
+.metadata-pallets-list-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.metadata-pallets-list {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.metadata-pallets-list-item {
+  padding: 0.25rem 0;
+  color: var(--text-primary);
+}
+
+.metadata-pallets-list-item + .metadata-pallets-list-item {
+  border-top: 1px solid var(--border-subtle);
+}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -87,8 +87,13 @@ export function Constructor({
   onAddBox,
   onRemoveBox,
   onAllInOne,
+  onDistribute,
 }) {
-  const [activeCode, setActiveCode] = React.useState(null);
+  const [activeCode, setActiveCode] = useState(null);
+  const [distributeOpen, setDistributeOpen] = useState(false);
+  const [distributeCount, setDistributeCount] = useState(1);
+  const totalToDistribute = unassignedCodes.length;
+  const maxBoxes = Math.max(1, totalToDistribute);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -138,6 +143,34 @@ export function Constructor({
     );
   }, []);
 
+  const handleDistributeOpen = useCallback(() => {
+    setDistributeCount(Math.min(maxBoxes, Math.max(1, Math.floor(totalToDistribute / 2) || 1)));
+    setDistributeOpen(true);
+  }, [maxBoxes, totalToDistribute]);
+
+  const handleDistributeApply = useCallback(() => {
+    const n = Math.min(maxBoxes, Math.max(1, distributeCount));
+    onDistribute?.(n);
+    setDistributeOpen(false);
+  }, [distributeCount, maxBoxes, onDistribute]);
+
+  const handleDistributeKeyDown = useCallback(
+    (e) => {
+      if (e.key === 'Enter') handleDistributeApply();
+      if (e.key === 'Escape') setDistributeOpen(false);
+    },
+    [handleDistributeApply]
+  );
+
+  useEffect(() => {
+    if (!distributeOpen) return;
+    const onEsc = (e) => {
+      if (e.key === 'Escape') setDistributeOpen(false);
+    };
+    document.addEventListener('keydown', onEsc);
+    return () => document.removeEventListener('keydown', onEsc);
+  }, [distributeOpen]);
+
   return (
     <section className="constructor-section">
       <div className="constructor-toolbar">
@@ -151,6 +184,16 @@ export function Constructor({
           >
             Все в одну коробку
           </button>
+          {onDistribute && (
+            <button
+              type="button"
+              className="constructor-btn constructor-btn--primary"
+              onClick={handleDistributeOpen}
+              disabled={unassignedCodes.length === 0}
+            >
+              Распределить
+            </button>
+          )}
           <button
             type="button"
             className="constructor-btn constructor-btn--secondary"
@@ -219,6 +262,58 @@ export function Constructor({
           ) : null}
         </DragOverlay>
       </DndContext>
+
+      {distributeOpen && (
+        <div
+          className="constructor-modal-overlay"
+          onClick={() => setDistributeOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="distribute-title"
+        >
+          <div
+            className="constructor-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h4 id="distribute-title" className="constructor-modal-title">
+              Распределить по коробкам
+            </h4>
+            <p className="constructor-modal-desc">
+              Кодов: {totalToDistribute}. Максимум коробок: {maxBoxes} (в каждой — минимум 1 код).
+            </p>
+            <div className="constructor-modal-field">
+              <label htmlFor="distribute-count">Количество коробок:</label>
+              <input
+                id="distribute-count"
+                type="number"
+                min={1}
+                max={maxBoxes}
+                value={distributeCount}
+                onChange={(e) =>
+                  setDistributeCount(Math.min(maxBoxes, Math.max(1, parseInt(e.target.value, 10) || 1)))
+                }
+                onKeyDown={handleDistributeKeyDown}
+              />
+            </div>
+            <div className="constructor-modal-actions">
+              <button
+                type="button"
+                className="constructor-btn constructor-btn--secondary"
+                onClick={() => setDistributeOpen(false)}
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                className="constructor-btn constructor-btn--primary"
+                onClick={handleDistributeApply}
+              >
+                Распределить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

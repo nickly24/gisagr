@@ -1,0 +1,171 @@
+/* DbGuide — в дизайне приложения (тот же что у конструктора) */
+
+.db-guide {
+  max-width: 720px;
+}
+
+.db-guide__intro {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.db-guide__toc {
+  margin-bottom: 2rem;
+}
+
+.db-guide__toc-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.db-guide__toc-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.db-guide__toc-link:hover {
+  color: var(--accent);
+}
+
+.db-guide__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.db-guide__section {
+  margin-bottom: 2.5rem;
+}
+
+.db-guide__h2 {
+  margin: 2rem 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.db-guide__h2:first-of-type {
+  margin-top: 0;
+}
+
+.db-guide__h3 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.db-guide__glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.db-guide__glossary-item {
+  margin: 0;
+}
+
+.db-guide__term {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--accent);
+  margin: 0 0 0.2rem;
+}
+
+.db-guide__def {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.db-guide__badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.db-guide__badge--shipment {
+  background: var(--accent-alpha);
+  color: var(--accent);
+}
+
+.db-guide__badge--aggregation {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.db-guide__flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.75rem 0;
+  font-size: 0.9375rem;
+}
+
+.db-guide__flow span {
+  padding: 0.35rem 0.75rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.db-guide__arrow {
+  color: var(--accent) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.db-guide__table-item {
+  margin: 1rem 0;
+}
+
+.db-guide__table-name {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.db-guide__tbl-desc {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--border);
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.db-guide__tbl-desc code {
+  font-size: 0.875em;
+}
+
+.db-guide__footer {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
